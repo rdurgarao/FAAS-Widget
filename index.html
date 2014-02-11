@@ -1,0 +1,15 @@
+<div id="feedback123">feedback</div>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="js/bpopup.js"></script>
+<script src="js/dombuilder.js"></script>
+<script src="js/application.js"></script>
+<script>
+  $("#feedback123").faas({
+  faas_url: 'http://localhost:9000/channels/devcycle/feedback',
+  speed : 400,
+  transition : 'slideIn',  //slideUp, slideDown, slideBack
+  api_key: '118065a57190907e2e200e3de5b8748d',
+  error_message: 'Problem sending feedback',
+  submit_message: 'Thanks for your feedback'
+  });
+</script>
