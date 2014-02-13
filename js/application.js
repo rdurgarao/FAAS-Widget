@@ -46,7 +46,7 @@
     var faas_var_rating_desc =
         ['div', {style: css.faas_rating_desc, id: 'faas_rating_desc'}
           , ['span', {style: css.faas_desc_title}, 'Rating']
-          , ['span', {style:"font-size: 30px"}, "☆☆☆☆☆"]
+          , ['span', {style: "font-size: 30px"}, "☆☆☆☆☆"]
         ]
 
 
@@ -69,7 +69,7 @@
           , DOMBuilder.build(faas_var_comment_desc)
           , DOMBuilder.build(faas_var_buttons)
 
-    ]
+        ]
 
     var faas_var_error_message =
         ['div', {style: css.faas_error_message}]
@@ -78,7 +78,7 @@
         ['div', {style: css.faas_submit_message}]
 
     var faas_var_button =
-        ['button', {style: css.faas_btn+css.faas_close_btn, text: 'close', class: 'close_popup'}]
+        ['button', {style: css.faas_btn + css.faas_close_btn, text: 'close', class: 'close_popup'}]
 
 //    *********************************************************************************************************************
 
@@ -142,8 +142,7 @@
         });
       }
 
-      function close_popup()
-      {
+      function close_popup() {
         $("#feedback_content").bPopup().close();
       }
 
@@ -151,70 +150,58 @@
         var option = $('input[name = feedback_type]:checked').val();
         var description = $("#feedback_desc").val();
 
-	var url = config.faas_url+'?feedback_type='+option+'&comments='+description+'&api_key='+config.api_key+'&rating=2';
-	var xhr = createCORSRequest('POST', url);
-	xhr.setRequestHeader('X-Custom-Header', 'value');
-	xhr.send();
+        var url = config.faas_url + '?feedback_type=' + option + '&comments=' + description + '&api_key=' + config.api_key + '&rating=2';
+        var xhr = createCORSRequest('POST', url);
+        xhr.setRequestHeader('X-Custom-Header', 'value');
+        xhr.send();
 
-	xhr.onreadystatechange = function(){
-	if (xhr.status == 200 )
-	{
-	 $('#feedback_content').empty();
-         $('#feedback_content').append(DOMBuilder.build(faas_var_submit_message));
-         $('#feedback_content :first').html(config.submit_message);
-         $('#feedback_content').append(DOMBuilder.build(faas_var_button));
-         $('.close_popup').click(function(){
-         close_popup();
-         });
-	}
-	else
-	{
-	$('#feedback_content').empty();
-        $('#feedback_content').append(DOMBuilder.build(faas_var_error_message));
-        $('#feedback_content :first').html(config.error_message);
-        $('#feedback_content').append(DOMBuilder.build(faas_var_button));
-        $('.close_popup').click(function(){
-        close_popup();
+        xhr.onreadystatechange = function () {
+          if (xhr.status == 200) {
+            $('#feedback_content').empty();
+            $('#feedback_content').append(DOMBuilder.build(faas_var_submit_message));
+            $('#feedback_content :first').html(config.submit_message);
+            $('#feedback_content').append(DOMBuilder.build(faas_var_button));
+          }
+          else {
+            $('#feedback_content').empty();
+            $('#feedback_content').append(DOMBuilder.build(faas_var_error_message));
+            $('#feedback_content :first').html(config.error_message);
+            $('#feedback_content').append(DOMBuilder.build(faas_var_button));
+          }
+          $('.close_popup').click(function () {
+            close_popup();
+          });
+
+        }
+
+        $.ajax({
+          type: 'POST',
+          contentType: "application/json; charset=utf-8",
+          crossDomain : true,
+          beforeSend: function(xhr){xhr.setRequestHeader('X-Custom-Header', 'value');},
+          dataType: 'jsonp',
+          data: {'feedback_type': option, 'comments': description, 'api_key': config.api_key, 'rating': "fds"},
+          url: config.faas_url,
+          success: function (data) {
+            $('#feedback_content').empty();
+            $('#feedback_content').append(DOMBuilder.build(faas_var_submit_message));
+            $('#feedback_content :first').html(config.submit_message);
+            $('#feedback_content').append(DOMBuilder.build(faas_var_button));
+            $('.close_popup').click(function(){
+              close_popup();
+            });
+
+          },
+          error: function (xhr, status) {
+            $('#feedback_content').empty();
+            $('#feedback_content').append(DOMBuilder.build(faas_var_error_message));
+            $('#feedback_content :first').html(config.error_message);
+            $('#feedback_content').append(DOMBuilder.build(faas_var_button));
+            $('.close_popup').click(function(){
+              close_popup();
+            });
+          }
         });
-	}
-
-}
-
-	//if (xhr.readyState == 2 )
-//	{
-
-
-//	}
-
-//        $.ajax({
-//          type: 'POST',
-//          contentType: "application/json; charset=utf-8",
-//	  crossDomain : true,
-//          dataType: 'json',
-//          data: {'feedback_type': option, 'comments': description, 'api_key': config.api_key, 'rating': "fds"},
-//          url: config.faas_url,
-//          success: function (data) {
-
-//            $('#feedback_content').empty();
-//            $('#feedback_content').append(DOMBuilder.build(faas_var_submit_message));
-//            $('#feedback_content :first').html(config.submit_message);
-//            $('#feedback_content').append(DOMBuilder.build(faas_var_button));
-//            $('.close_popup').click(function(){
-//              close_popup();
-//            });
-
-//          },
-//          error: function (xhr, status) {
-
-//            $('#feedback_content').empty();
-//            $('#feedback_content').append(DOMBuilder.build(faas_var_error_message));
-//            $('#feedback_content :first').html(config.error_message);
-//            $('#feedback_content').append(DOMBuilder.build(faas_var_button));
-//            $('.close_popup').click(function(){
-//              close_popup();
-//            });
-//          }
-//       });
       }
     });
   };
@@ -236,7 +223,7 @@
     faas_fdbck_span: "",
     faas_comment_desc: "padding-top: 40px;",
     faas_rating_desc: "padding-top: 30px",
-    faas_btn: "cursor: pointer;font-family: Open Sans, Helvetica Neue, Helvetica, Helvetica, Arial, sans-serif !important;font-weight: normal;  line-height: normal;margin: 0 0 1.11111rem; position: relative; text-decoration: none;text-align: center;display: inline-block; padding-top: 0.88889rem; padding-right: 1.0rem;  padding-bottom: 0.94444rem;  padding-left: 1.0rem;  font-size: 0.88889rem;  background-color: #008cba;  border-color: #007ba1;  color: white;  -webkit-transition: background-color 300ms ease-out;  -moz-transition: background-color 300ms ease-out;  transition: background-color 300ms ease-out;  padding-top: 0.94444rem;  padding-bottom: 0.88889rem;  -webkit-appearance: none;  border: none;  font-weight: normal !important;",    faas_close_btn: "margin-left : 40%;margin-top : 10%;",
+    faas_btn: "cursor: pointer;font-family: Open Sans, Helvetica Neue, Helvetica, Helvetica, Arial, sans-serif !important;font-weight: normal;  line-height: normal;margin: 0 0 1.11111rem; position: relative; text-decoration: none;text-align: center;display: inline-block; padding-top: 0.88889rem; padding-right: 1.0rem;  padding-bottom: 0.94444rem;  padding-left: 1.0rem;  font-size: 0.88889rem;  background-color: #008cba;  border-color: #007ba1;  color: white;  -webkit-transition: background-color 300ms ease-out;  -moz-transition: background-color 300ms ease-out;  transition: background-color 300ms ease-out;  padding-top: 0.94444rem;  padding-bottom: 0.88889rem;  -webkit-appearance: none;  border: none;  font-weight: normal !important;", faas_close_btn: "margin-left : 40%;margin-top : 10%;",
     faas_error_message: "color: red; text-align: center;padding-top: 10%;border-style: solid;border-width: 1px;  display: block; font-weight: normal;  margin-bottom: 1.11111rem;  position: relative;  padding: 0.77778rem 1.33333rem 0.77778rem 0.77778rem;  font-size: 0.72222rem;",
     faas_submit_message: "color: green; text-align: center;padding-top: 10%;"
   }
